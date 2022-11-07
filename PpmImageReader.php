@@ -18,8 +18,8 @@
    */
 class PpmImageReader {
 
-    public function PpmImageReader() {
-    }
+    public function __construct()
+    {}
     
     public function getType() {
         return 'ppm';
@@ -73,7 +73,7 @@ class PpmImageReader {
             $buf = $this->readLine($file); // Rest of first line 
             $buf = $this->readLine($file); // Comment?
 
-            while (ereg('^#', $buf)) {
+            while (preg_match('/^#/', $buf)) {
                 $buf = $this->readLine($file); // Skip comments and get next line
             }
             
@@ -188,7 +188,7 @@ class PpmImageReader {
     private function readToken($file) {
         $buf = ''; 
         while (($b = fread ($file, 1)) !== '') {
-            if (ereg("[ \t\n\r]", $b)) break;
+            if (preg_match("/[ \t\n\r]/", $b)) break;
             $buf .= $b;         
         }
         if (!feof($file)) fseek($file, -1, SEEK_CUR);
@@ -198,7 +198,7 @@ class PpmImageReader {
     private function readWhite($file) {
         $buf = '';
         while (($b = fread ($file, 1)) !== '') {
-            if (!ereg("[ \t\n\r]", $b)) break;
+            if (!preg_match("/[ \t\n\r]/", $b)) break;
             $buf .= $b;          
         }
         if (!feof($file)) fseek($file, -1, SEEK_CUR);
